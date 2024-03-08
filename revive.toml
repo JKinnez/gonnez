@@ -1,0 +1,20 @@
+ignoreGeneratedHeader = false
+severity = "error"
+confidence = 0.8
+errorCode = 1
+warningCode = 0
+enableAllRules = true
+
+[rule.line-length-limit]
+  arguments = [120]
+
+[rule.bare-return]
+  Disabled = true
+[rule.package-comments]
+  Disabled = true
+[rule.exported]
+  Disabled = true
+[rule.dot-imports]
+  Disabled = true
+[rule.blank-imports]
+  Disabled = true
