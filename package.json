@@ -1,6 +1,6 @@
 {
   "name": "gonnez",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "main.go",
   "private": true,
   "scripts": {
@@ -9,6 +9,6 @@
     "mod": "go mod tidy",
     "update": "yarn get && yarn mod",
     "test": "ginkgo -r",
-    "test:deep": "ginkgo -r --fail-on-pending --cover --trace --race --progress"
+    "test:deep": "ginkgo -r --fail-on-pending --cover --trace --race"
   }
 }
