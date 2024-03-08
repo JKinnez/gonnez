@@ -1,0 +1,6 @@
+tmp
+*.exe
+*.log
+*.coverprofile
+*.tmp
+*.out
