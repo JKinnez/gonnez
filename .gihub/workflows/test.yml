@@ -6,7 +6,6 @@ on:
     branches: [main]
     paths:
       - '**.go'
-      - 'revive.toml'
       - '.github/workflows/test.yaml'
 
 jobs:
