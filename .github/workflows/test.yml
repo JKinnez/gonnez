@@ -23,7 +23,7 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v4
 
-    - name: Install revive
+    - name: Install ginkgo
       run: go install github.com/onsi/ginkgo/v2/ginkgo
 
     - name: Do tests
