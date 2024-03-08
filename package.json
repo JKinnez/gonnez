@@ -9,6 +9,6 @@
     "mod": "go mod tidy",
     "update": "yarn get && yarn mod",
     "test": "ginkgo -r",
-    "test:deep": "ginkgo -r --fail-on-pending --cover --trace --race --progress"
+    "test:deep": "ginkgo -r --fail-on-pending --cover --trace --race"
   }
 }
