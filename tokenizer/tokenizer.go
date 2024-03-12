@@ -9,12 +9,14 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-const issuer = "gonnez-tokenizer-issuer"
-const defaultSymetricKeyEnvName = "GONNEZ_SYMMETRIC_KEY"
-const defaultPrivateKeyEnvName = "GONNEZ_PRIVATE_KEY"
-const defaultPublicKeyEnvName = "GONNEZ_PUBLIC_KEY"
-const bearerPrefix = "Bearer "
-const emptyString = ""
+const (
+	issuer                    = "gonnez-tokenizer-issuer"
+	defaultSymetricKeyEnvName = "GONNEZ_SYMMETRIC_KEY"
+	defaultPrivateKeyEnvName  = "GONNEZ_PRIVATE_KEY"
+	defaultPublicKeyEnvName   = "GONNEZ_PUBLIC_KEY"
+	bearerPrefix              = "Bearer "
+	emptyString               = ""
+)
 
 var validate *validator.Validate
 
