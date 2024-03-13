@@ -36,16 +36,8 @@ func (r *Router) AddRoute(path string, controller ControllerInterface, options s
 func NewRouter() Router {
 	e := echo.New()
 	router := Router{e}
-	router.Use(initController)
 	router.Use(middleware.Logger())
 	router.Use(middleware.Recover())
 
 	return router
-}
-
-func initController(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		cc := &Controller{c}
-		return next(cc)
-	}
 }

@@ -7,6 +7,7 @@ import (
 )
 
 type ControllerInterface interface {
+	Init(ctx echo.Context)
 	Prepare() error
 	Index() error
 	Create() error
@@ -17,6 +18,10 @@ type ControllerInterface interface {
 
 type Controller struct {
 	echo.Context
+}
+
+func (c *Controller) Init(ctx echo.Context) {
+	c.Context = ctx
 }
 
 func (*Controller) Prepare() error {

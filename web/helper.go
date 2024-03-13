@@ -37,13 +37,22 @@ func handler(controller ControllerInterface, method string) reflect.Value {
 }
 
 func handlerFunc(handler reflect.Value, controller ControllerInterface) echo.HandlerFunc {
-	return func(echo.Context) error {
+	return func(c echo.Context) error {
+		controller.Init(c)
 		err := controller.Prepare()
 		if err != nil {
 			return err
 		}
-		// revive:disable:unchecked-type-assertion
-		return handler.Call(nil)[0].Interface().(error)
-		// revive:enable:unchecked-type-assertion
+
+		return result(handler.Call(nil))
 	}
+}
+
+func result(method []reflect.Value) error {
+	if len(method) > zero && !method[zero].IsNil() {
+		if err, ok := method[zero].Interface().(error); ok {
+			return err
+		}
+	}
+	return nil
 }
