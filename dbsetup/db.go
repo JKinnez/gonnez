@@ -27,11 +27,7 @@ type DBOptions struct {
 	Models []any
 }
 
-func NewDatabaseConnection(orm *gorm.DB, options DBOptions) (err error) {
-	if orm != nil {
-		return fmt.Errorf(errAlreadyConnected)
-	}
-
+func NewDatabaseConnection(options DBOptions) (orm *gorm.DB, err error) {
 	orm, err = options.open()
 	if err != nil {
 		return
