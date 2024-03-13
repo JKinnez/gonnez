@@ -17,7 +17,7 @@ const (
 	errNoDB             = "no database connection"
 	errCanDelete        = "can't delete data in production you maniac"
 	errAlreadyConnected = "already connected to database"
-	defaultDBEnv        = "GONNEZ_TEST_DATABASE_URL"
+	defaultDBEnv        = "GONNEZ_DATABASE_URL"
 	emptyString         = ""
 )
 
