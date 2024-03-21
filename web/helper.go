@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"sync"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,6 +17,7 @@ const (
 var (
 	errNotImplemented = "Method not implemented"
 	errMethodNotFound = "Method %s does not exist in controller"
+	m                 sync.Mutex
 )
 
 func methodNotFound(method string) string {
@@ -38,6 +40,9 @@ func handler(controller ControllerInterface, method string) reflect.Value {
 
 func handlerFunc(handler reflect.Value, controller ControllerInterface) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		m.Lock()
+		defer m.Unlock()
+
 		controller.Init(c)
 		err := controller.Prepare()
 		if err != nil {
