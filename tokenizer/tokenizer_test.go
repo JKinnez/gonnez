@@ -19,7 +19,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{})
+				t := tokenizer.New(tokenizer.Config{})
 				symetricBearerToken, err := t.GenerateSymetricBearerToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(symetricBearerToken).ToNot(BeEmpty())
@@ -40,7 +40,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:           "audience",
 					Issuer:             "issuer",
 					Location:           "Europe/Madrid",
@@ -68,7 +68,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{})
+				t := tokenizer.New(tokenizer.Config{})
 				symetricToken, err := t.GenerateSymetricToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(symetricToken).ToNot(BeEmpty())
@@ -88,7 +88,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:           "audience",
 					Issuer:             "issuer",
 					Location:           "Europe/Madrid",
@@ -118,7 +118,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{})
+				t := tokenizer.New(tokenizer.Config{})
 				privateBearerToken, err := t.GeneratePrivateBearerToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(privateBearerToken).ToNot(BeEmpty())
@@ -142,7 +142,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:          "audience",
 					Issuer:            "issuer",
 					Location:          "Europe/Madrid",
@@ -174,7 +174,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{})
+				t := tokenizer.New(tokenizer.Config{})
 				privateToken, err := t.GeneratePrivateToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(privateToken).ToNot(BeEmpty())
@@ -197,7 +197,7 @@ var _ = Describe("Tokenizer.Flows", func() {
 				Expect(err).To(BeNil())
 
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.TokenizerOptions{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:          "audience",
 					Issuer:            "issuer",
 					Location:          "Europe/Madrid",

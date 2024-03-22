@@ -48,14 +48,14 @@ var Durations = struct {
 	ThreeMonths: 90 * hours,
 }
 
-type TokenizerOptions struct {
+type Config struct {
 	Audience           string
+	Footer             *string
 	Issuer             string
 	Location           string
-	SymetricKeyEnvName string
 	PublicKeyEnvName   string
-	Footer             *string
 	PrivateKeyEnvName  string
+	SymetricKeyEnvName string
 	// revive:disable:struct-tag
 	expiration Duration `validate:"min=1"`
 	subject    string   `validate:"required"`
@@ -64,12 +64,12 @@ type TokenizerOptions struct {
 }
 
 type Tokenizer struct {
-	TokenizerOptions
+	Config
 }
 
-func New(options TokenizerOptions) *Tokenizer {
+func New(options Config) *Tokenizer {
 	return &Tokenizer{
-		TokenizerOptions: options,
+		options,
 	}
 }
 
