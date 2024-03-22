@@ -34,6 +34,11 @@ Public and private key
 ```
 package main
 
+import (
+  "fmt"
+  "github.com/gonnez/tokenizer"
+)
+
 func main() {
   tokenizer = tokenizer.New(tokenizer.Options{})
   subject := "0x3"
