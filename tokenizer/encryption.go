@@ -7,45 +7,23 @@ import (
 	"github.com/o1egl/paseto"
 )
 
-type EncriptionOpts struct {
-	Audience           string  `validate:"-"`
-	Issuer             string  `validate:"-"`
-	Subject            string  `validate:"required"`
-	Location           string  `validate:"-"`
-	Footer             *string `validate:"-"`
-	SymetricKeyEnvName string  `validate:"-"`
-	PrivateKeyEnvName  string  `validate:"-"`
-	// revive:disable:struct-tag
-	expiration int `validate:"min=1"`
-	// revive:enable:struct-tag
-}
-
-type Tokenizer struct {
-	EncriptionOpts
-}
-
-func New(options EncriptionOpts) *Tokenizer {
-	return &Tokenizer{
-		options,
-	}
-}
-
-func (t *Tokenizer) GeneratePrivateBearerToken(expiration int) (bearer string, err error) {
-	token, err := t.GeneratePrivateToken(expiration)
+func (t *Tokenizer) GeneratePrivateBearerToken(subject string, durationInHours Duration) (bearer string, err error) {
+	token, err := t.GeneratePrivateToken(subject, durationInHours)
 
 	bearer = buildBearer(token)
 	return
 }
 
-func (t *Tokenizer) GenerateSymetricBearerToken(expiration int) (bearer string, err error) {
-	token, err := t.GenerateSymetricToken(expiration)
+func (t *Tokenizer) GenerateSymetricBearerToken(subject string, durationInHours Duration) (bearer string, err error) {
+	token, err := t.GenerateSymetricToken(subject, durationInHours)
 
 	bearer = buildBearer(token)
 	return
 }
 
-func (t *Tokenizer) GeneratePrivateToken(expiration int) (token string, err error) {
-	t.expiration = expiration
+func (t *Tokenizer) GeneratePrivateToken(subject string, durationInHours Duration) (token string, err error) {
+	t.expiration = durationInHours
+	t.subject = subject
 	payload, err := t.validateAndBuild()
 	if err != nil {
 		return
@@ -55,8 +33,9 @@ func (t *Tokenizer) GeneratePrivateToken(expiration int) (token string, err erro
 	return
 }
 
-func (t *Tokenizer) GenerateSymetricToken(expiration int) (token string, err error) {
-	t.expiration = expiration
+func (t *Tokenizer) GenerateSymetricToken(subject string, durationInHours Duration) (token string, err error) {
+	t.expiration = durationInHours
+	t.subject = subject
 	payload, err := t.validateAndBuild()
 	if err != nil {
 		return
@@ -105,7 +84,7 @@ func (t *Tokenizer) buildJSONToken() (payload paseto.JSONToken, err error) {
 	}
 
 	payload = paseto.JSONToken{
-		Subject:    t.Subject,
+		Subject:    t.subject,
 		IssuedAt:   now,
 		NotBefore:  now,
 		Expiration: expiracy(now, t.expiration),

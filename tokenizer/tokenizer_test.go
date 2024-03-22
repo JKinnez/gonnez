@@ -18,16 +18,14 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("GONNEZ_SYMMETRIC_KEY", key)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{Subject: subject})
-				symetricBearerToken, err := t.GenerateSymetricBearerToken(timeInHours)
+				t := tokenizer.New(tokenizer.Config{})
+				symetricBearerToken, err := t.GenerateSymetricBearerToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(symetricBearerToken).ToNot(BeEmpty())
 				Expect(symetricBearerToken).To(ContainSubstring("Bearer "))
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{Token: symetricBearerToken})
-				jsonToken, err := r.ReadSymetricBearerToken()
+				jsonToken, err := t.ReadSymetricBearerToken(symetricBearerToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
@@ -41,27 +39,19 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("SYMMETRIC_KEY", key)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:           "audience",
 					Issuer:             "issuer",
-					Subject:            subject,
 					Location:           "Europe/Madrid",
 					SymetricKeyEnvName: "SYMMETRIC_KEY",
 				})
-				symetricBearerToken, err := t.GenerateSymetricBearerToken(timeInHours)
+				symetricBearerToken, err := t.GenerateSymetricBearerToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(symetricBearerToken).ToNot(BeEmpty())
 				Expect(symetricBearerToken).To(ContainSubstring("Bearer "))
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{
-					Token:              symetricBearerToken,
-					Issuer:             "issuer",
-					Location:           "Europe/Madrid",
-					SymetricKeyEnvName: "SYMMETRIC_KEY",
-				})
-				jsonToken, err := r.ReadSymetricBearerToken()
+				jsonToken, err := t.ReadSymetricBearerToken(symetricBearerToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
@@ -77,15 +67,13 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("GONNEZ_SYMMETRIC_KEY", key)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{Subject: subject})
-				symetricBearerToken, err := t.GenerateSymetricToken(timeInHours)
+				t := tokenizer.New(tokenizer.Config{})
+				symetricToken, err := t.GenerateSymetricToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
-				Expect(symetricBearerToken).ToNot(BeEmpty())
+				Expect(symetricToken).ToNot(BeEmpty())
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{Token: symetricBearerToken})
-				jsonToken, err := r.ReadSymetricToken()
+				jsonToken, err := t.ReadSymetricToken(symetricToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
@@ -99,26 +87,18 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("SYMMETRIC_KEY", key)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:           "audience",
 					Issuer:             "issuer",
-					Subject:            subject,
 					Location:           "Europe/Madrid",
 					SymetricKeyEnvName: "SYMMETRIC_KEY",
 				})
-				symetricBearerToken, err := t.GenerateSymetricToken(timeInHours)
+				symetricToken, err := t.GenerateSymetricToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
-				Expect(symetricBearerToken).ToNot(BeEmpty())
+				Expect(symetricToken).ToNot(BeEmpty())
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{
-					Token:              symetricBearerToken,
-					Issuer:             "issuer",
-					Location:           "Europe/Madrid",
-					SymetricKeyEnvName: "SYMMETRIC_KEY",
-				})
-				jsonToken, err := r.ReadSymetricToken()
+				jsonToken, err := t.ReadSymetricToken(symetricToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
@@ -137,16 +117,14 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("GONNEZ_PUBLIC_KEY", public)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{Subject: subject})
-				privateBearerToken, err := t.GeneratePrivateBearerToken(timeInHours)
+				t := tokenizer.New(tokenizer.Config{})
+				privateBearerToken, err := t.GeneratePrivateBearerToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(privateBearerToken).ToNot(BeEmpty())
 				Expect(privateBearerToken).To(ContainSubstring("Bearer "))
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{Token: privateBearerToken})
-				jsonToken, err := r.ReadPrivateBearerToken()
+				jsonToken, err := t.ReadPrivateBearerToken(privateBearerToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
@@ -163,27 +141,20 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("PUBLIC_KEY", public)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:          "audience",
 					Issuer:            "issuer",
-					Subject:           subject,
 					Location:          "Europe/Madrid",
 					PrivateKeyEnvName: "PRIVATE_KEY",
+					PublicKeyEnvName:  "PUBLIC_KEY",
 				})
-				privateBearerToken, err := t.GeneratePrivateBearerToken(timeInHours)
+				privateBearerToken, err := t.GeneratePrivateBearerToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
 				Expect(privateBearerToken).ToNot(BeEmpty())
 				Expect(privateBearerToken).To(ContainSubstring("Bearer "))
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{
-					Token:            privateBearerToken,
-					Issuer:           "issuer",
-					Location:         "Europe/Madrid",
-					PublicKeyEnvName: "PUBLIC_KEY",
-				})
-				jsonToken, err := r.ReadPrivateBearerToken()
+				jsonToken, err := t.ReadPrivateBearerToken(privateBearerToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
@@ -202,15 +173,13 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("GONNEZ_PUBLIC_KEY", public)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{Subject: subject})
-				privateBearerToken, err := t.GeneratePrivateToken(timeInHours)
+				t := tokenizer.New(tokenizer.Config{})
+				privateToken, err := t.GeneratePrivateToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
-				Expect(privateBearerToken).ToNot(BeEmpty())
+				Expect(privateToken).ToNot(BeEmpty())
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{Token: privateBearerToken})
-				jsonToken, err := r.ReadPrivateToken()
+				jsonToken, err := t.ReadPrivateToken(privateToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
@@ -227,26 +196,19 @@ var _ = Describe("Tokenizer.Flows", func() {
 				err = os.Setenv("PUBLIC_KEY", public)
 				Expect(err).To(BeNil())
 
-				timeInHours := 1
 				subject := "3x0"
-				t := tokenizer.New(tokenizer.EncriptionOpts{
+				t := tokenizer.New(tokenizer.Config{
 					Audience:          "audience",
 					Issuer:            "issuer",
-					Subject:           subject,
 					Location:          "Europe/Madrid",
 					PrivateKeyEnvName: "PRIVATE_KEY",
+					PublicKeyEnvName:  "PUBLIC_KEY",
 				})
-				privateBearerToken, err := t.GeneratePrivateToken(timeInHours)
+				privateToken, err := t.GeneratePrivateToken(subject, tokenizer.Durations.OneDay)
 				Expect(err).To(BeNil())
-				Expect(privateBearerToken).ToNot(BeEmpty())
+				Expect(privateToken).ToNot(BeEmpty())
 
-				r := tokenizer.NewReader(tokenizer.ReaderOptions{
-					Token:            privateBearerToken,
-					Issuer:           "issuer",
-					Location:         "Europe/Madrid",
-					PublicKeyEnvName: "PUBLIC_KEY",
-				})
-				jsonToken, err := r.ReadPrivateToken()
+				jsonToken, err := t.ReadPrivateToken(privateToken)
 				Expect(err).To(BeNil())
 				Expect(jsonToken.Subject).To(Equal(subject))
 			})
