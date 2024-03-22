@@ -12,66 +12,50 @@ type ReaderResult struct {
 	Footer string
 }
 
-type ReaderOptions struct {
-	Token              string `validate:"required"`
-	Issuer             string `validate:"-"`
-	Location           string `validate:"-"`
-	SymetricKeyEnvName string `validate:"-"`
-	PublicKeyEnvName   string `validate:"-"`
-}
+func (t *Tokenizer) ReadPrivateBearerToken(token string) (jsonToken ReaderResult, err error) {
+	token = splitBearer(token)
 
-type Reader struct {
-	ReaderOptions
-}
-
-func NewReader(options ReaderOptions) *Reader {
-	return &Reader{
-		options,
-	}
-}
-
-func (r *Reader) ReadPrivateBearerToken() (jsonToken ReaderResult, err error) {
-	r.Token = splitBearer(r.Token)
-
-	jsonToken, err = r.ReadPrivateToken()
+	jsonToken, err = t.ReadPrivateToken(token)
 	return
 }
 
-func (r *Reader) ReadSymetricBearerToken() (jsonToken ReaderResult, err error) {
-	r.Token = splitBearer(r.Token)
+func (t *Tokenizer) ReadSymetricBearerToken(token string) (jsonToken ReaderResult, err error) {
+	token = splitBearer(token)
 
-	jsonToken, err = r.ReadSymetricToken()
+	jsonToken, err = t.ReadSymetricToken(token)
 	return
 }
 
-func (r *Reader) ReadPrivateToken() (jsonToken ReaderResult, err error) {
-	jsonToken, err = r.verify()
+func (t *Tokenizer) ReadPrivateToken(token string) (jsonToken ReaderResult, err error) {
+	t.token = token
+	jsonToken, err = t.verify()
 	if err != nil {
 		return
 	}
 
-	err = r.validate(jsonToken)
+	err = t.validate(jsonToken)
 	return
 }
 
-func (r *Reader) ReadSymetricToken() (jsonToken ReaderResult, err error) {
-	jsonToken, err = r.decrypt()
+func (t *Tokenizer) ReadSymetricToken(token string) (jsonToken ReaderResult, err error) {
+	t.token = token
+	jsonToken, err = t.decrypt()
 	if err != nil {
 		return
 	}
 
-	err = r.validate(jsonToken)
+	err = t.validate(jsonToken)
 	return
 }
 
-func (r *Reader) verify() (jsonToken ReaderResult, err error) {
-	key, err := hex.DecodeString(publickey(r.PublicKeyEnvName))
+func (t *Tokenizer) verify() (jsonToken ReaderResult, err error) {
+	key, err := hex.DecodeString(publickey(t.PublicKeyEnvName))
 	if err != nil {
 		return
 	}
 
 	v2 := paseto.NewV2()
-	err = v2.Verify(r.Token, ed25519.PublicKey(key), &jsonToken, &jsonToken.Footer)
+	err = v2.Verify(t.token, ed25519.PublicKey(key), &jsonToken, &jsonToken.Footer)
 	if err != nil {
 		return
 	}
@@ -79,14 +63,14 @@ func (r *Reader) verify() (jsonToken ReaderResult, err error) {
 	return
 }
 
-func (r *Reader) decrypt() (jsonToken ReaderResult, err error) {
-	key, err := hex.DecodeString(symetrickey(r.SymetricKeyEnvName))
+func (t *Tokenizer) decrypt() (jsonToken ReaderResult, err error) {
+	key, err := hex.DecodeString(symetrickey(t.SymetricKeyEnvName))
 	if err != nil {
 		return
 	}
 
 	v2 := paseto.NewV2()
-	err = v2.Decrypt(r.Token, key, &jsonToken, &jsonToken.Footer)
+	err = v2.Decrypt(t.token, key, &jsonToken, &jsonToken.Footer)
 	if err != nil {
 		return
 	}
@@ -94,12 +78,12 @@ func (r *Reader) decrypt() (jsonToken ReaderResult, err error) {
 	return
 }
 
-func (r *Reader) validate(jsonToken ReaderResult) (err error) {
-	now, err := toLocale(now(), r.Location)
+func (t *Tokenizer) validate(jsonToken ReaderResult) (err error) {
+	now, err := toLocale(now(), t.Location)
 	if err != nil {
 		return
 	}
 
-	err = jsonToken.Validate(paseto.IssuedBy(setIssuer(r.Issuer)), paseto.ValidAt(now))
+	err = jsonToken.Validate(paseto.IssuedBy(setIssuer(t.Issuer)), paseto.ValidAt(now))
 	return
 }
