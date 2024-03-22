@@ -6,8 +6,6 @@ import (
 	"encoding/hex"
 )
 
-const keyLenght = 32
-
 func GenerateSymmetricKey() (symetrickey string, err error) {
 	key := make([]byte, keyLenght)
 	_, err = rand.Read(key)

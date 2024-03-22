@@ -16,9 +16,62 @@ const (
 	defaultPublicKeyEnvName   = "GONNEZ_PUBLIC_KEY"
 	bearerPrefix              = "Bearer "
 	emptyString               = ""
+	keyLenght                 = 32
 )
 
-var validate *validator.Validate
+type Duration int64
+
+var (
+	validate *validator.Validate
+	hours    Duration = 24
+)
+
+var Durations = struct {
+	OneDay      Duration
+	TwoDays     Duration
+	ThreeDays   Duration
+	OneWeek     Duration
+	TwoWeeks    Duration
+	ThreeWeeks  Duration
+	OneMonth    Duration
+	TwoMonths   Duration
+	ThreeMonths Duration
+}{
+	OneDay:      hours,
+	TwoDays:     2 * hours,
+	ThreeDays:   3 * hours,
+	OneWeek:     7 * hours,
+	TwoWeeks:    14 * hours,
+	ThreeWeeks:  21 * hours,
+	OneMonth:    30 * hours,
+	TwoMonths:   60 * hours,
+	ThreeMonths: 90 * hours,
+}
+
+type TokenizerOptions struct {
+	Audience           string
+	Issuer             string
+	Location           string
+	SymetricKeyEnvName string
+	PublicKeyEnvName   string
+	Footer             *string
+	PrivateKeyEnvName  string
+	// revive:disable:struct-tag
+	expiration Duration `validate:"min=1"`
+	subject    string   `validate:"required"`
+	token      string   `validate:"required"`
+	// revive:enable:struct-tag
+}
+
+type Tokenizer struct {
+	TokenizerOptions
+}
+
+func New(options TokenizerOptions) *Tokenizer {
+	return &Tokenizer{
+		TokenizerOptions: options,
+	}
+}
 
 func buildBearer(token string) string {
 	return fmt.Sprintf("%s%s", bearerPrefix, token)
@@ -85,6 +138,6 @@ func toLocale(current time.Time, location string) (currentLocale time.Time, err 
 	return
 }
 
-func expiracy(current time.Time, expiration int) time.Time {
+func expiracy(current time.Time, expiration Duration) time.Time {
 	return current.Add(time.Duration(expiration) * time.Hour)
 }
