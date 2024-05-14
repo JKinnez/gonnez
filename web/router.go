@@ -5,6 +5,20 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+var Methods = struct {
+	Index  string
+	Create string
+	Show   string
+	Update string
+	Delete string
+}{
+	Index:  "GET:Index",
+	Create: "POST:Create",
+	Show:   "GET:Show",
+	Update: "PUT:Update",
+	Delete: "DELETE:Delete",
+}
+
 type RouterInterface interface {
 	AddRoute(path string, controller ControllerInterface, options string)
 }
@@ -17,6 +31,12 @@ func (rg *RouterGroup) AddRoute(path string, controller ControllerInterface, opt
 	request, method := split(options)
 	handler := handler(controller, method)
 	rg.Add(request, path, handlerFunc(handler, controller))
+}
+
+func (rg *RouterGroup) RouterGroup(path string, m ...echo.MiddlewareFunc) RouterGroup {
+	return RouterGroup{
+		rg.Group.Group(path, m...),
+	}
 }
 
 type Router struct {
