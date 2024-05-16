@@ -6,17 +6,17 @@ import (
 )
 
 var Methods = struct {
-	Index  string
-	Create string
-	Show   string
-	Update string
-	Delete string
+	Index   string
+	Create  string
+	Show    string
+	Update  string
+	Destroy string
 }{
-	Index:  "GET:Index",
-	Create: "POST:Create",
-	Show:   "GET:Show",
-	Update: "PUT:Update",
-	Delete: "DELETE:Delete",
+	Index:   "GET:Index",
+	Create:  "POST:Create",
+	Show:    "GET:Show",
+	Update:  "PUT:Update",
+	Destroy: "DELETE:Destroy",
 }
 
 type RouterInterface interface {
