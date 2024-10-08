@@ -3,6 +3,7 @@ package tokenizer
 import (
 	"crypto/ed25519"
 	"encoding/hex"
+	"errors"
 
 	"github.com/o1egl/paseto"
 )
@@ -29,6 +30,11 @@ func (t *Tokenizer) GeneratePrivateToken(subject string, durationInHours Duratio
 		return
 	}
 
+	if t.PrivateKey == emptyString {
+		err = errors.New(ErrNotPrivateKey)
+		return
+	}
+
 	token, err = t.sign(payload)
 	return
 }
@@ -41,12 +47,17 @@ func (t *Tokenizer) GenerateSymetricToken(subject string, durationInHours Durati
 		return
 	}
 
+	if t.SymetricKey == emptyString {
+		err = errors.New(ErrNotSymetricKey)
+		return
+	}
+
 	token, err = t.encript(payload)
 	return
 }
 
 func (t *Tokenizer) sign(payload paseto.JSONToken) (token string, err error) {
-	key, err := hex.DecodeString(privatekey(t.PrivateKeyEnvName))
+	key, err := hex.DecodeString(t.PrivateKey)
 	if err != nil {
 		return
 	}
@@ -57,7 +68,7 @@ func (t *Tokenizer) sign(payload paseto.JSONToken) (token string, err error) {
 }
 
 func (t *Tokenizer) encript(payload paseto.JSONToken) (token string, err error) {
-	key, err := hex.DecodeString(symetrickey(t.SymetricKeyEnvName))
+	key, err := hex.DecodeString(t.SymetricKey)
 	if err != nil {
 		return
 	}

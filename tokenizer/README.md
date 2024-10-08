@@ -11,9 +11,18 @@ Package to manage tokenization using [Paseto](https://github.com/o1egl/paseto) u
 - Footer
 - Issuer
 - Location: set a location for the token expiracy time. Defaults to `UTC` example: `Europe/Madrid`
-- PublicKeyEnvName: Defaults to `GONNEZ_PUBLIC_KEY`
-- PrivateKeyEnvName: Defaults to `GONNEZ_PRIVATE_KEY`
-- SymetricKeyEnvName: Defaults to `GONNEZ_SYMMETRIC_KEY`
+- PublicKey
+- PrivateKey
+- SymetricKey
+
+### Result 
+
+```
+type ReaderResult struct {
+	paseto.JSONToken
+	Footer string
+}
+```
 
 ### Usage
 
@@ -40,9 +49,12 @@ import (
 )
 
 func main() {
-  tokenizer = tokenizer.New(tokenizer.Options{})
+  tokenizer = tokenizer.New(tokenizer.Options{
+    SymmetricKey: "your-key"
+  })
   subject := "0x3"
-  token, err := tokenizer.GenerateSymetricBearerToken(subject, tokenizer.Durations.OneDay)
+  durationInHours := tokenizer.Durations.OneDay
+  bearerToken, err := tokenizer.GenerateSymetricBearerToken(subject, durationInHours)
   if err != nil {
     // handle error
   }
@@ -54,6 +66,36 @@ func main() {
   // Output: 0x3
 }  
 ```
+
+#### Functions
+  
+  Generate and read  a private bearer token
+  ```
+  GeneratePrivateBearerToken(subject string, durationInHours Duration) (bearer string, err error)
+
+  ReadPrivateBearerToken(token string) (jsonToken ReaderResult, err error)
+  ```
+
+  Generate and read a symetric bearer token
+  ```
+  GenerateSymetricBearerToken(subject string, durationInHours Duration) (bearer string, err error)
+
+  ReadSymetricBearerToken(token string) (jsonToken ReaderResult, err error)
+  ```
+
+  Generate and read a private token
+  ```
+  GeneratePrivateToken(subject string, durationInHours Duration) (token string, err error)
+
+  ReadPrivateToken(token string) (jsonToken ReaderResult, err error)
+  ```
+
+  Generate and read a symetric token
+  ```
+  GenerateSymetricToken(subject string, durationInHours Duration) (token string, err error)
+
+  ReadSymetricToken(token string) (jsonToken ReaderResult, err error)
+  ```
 
 #### Duration in hours
 
