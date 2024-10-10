@@ -18,3 +18,5 @@ enableAllRules = true
   Disabled = true
 [rule.blank-imports]
   Disabled = true
+[rule.struct-tag]
+  Disabled = true

@@ -2,7 +2,6 @@ package tokenizer
 
 import (
 	"fmt"
-	"os"
 	"time"
 	_ "time/tzdata"
 
@@ -10,13 +9,13 @@ import (
 )
 
 const (
-	issuer                    = "gonnez-tokenizer-issuer"
-	defaultSymetricKeyEnvName = "GONNEZ_SYMMETRIC_KEY"
-	defaultPrivateKeyEnvName  = "GONNEZ_PRIVATE_KEY"
-	defaultPublicKeyEnvName   = "GONNEZ_PUBLIC_KEY"
-	bearerPrefix              = "Bearer "
-	emptyString               = ""
-	keyLenght                 = 32
+	issuer            = "gonnez-tokenizer-issuer"
+	bearerPrefix      = "Bearer "
+	emptyString       = ""
+	keyLenght         = 32
+	ErrNotPrivateKey  = "private key is not set"
+	ErrNotSymetricKey = "symetric key is not set"
+	ErrNotPublicKey   = "public key is not set"
 )
 
 type Duration int64
@@ -49,18 +48,16 @@ var Durations = struct {
 }
 
 type Config struct {
-	Audience           string
-	Footer             *string
-	Issuer             string
-	Location           string
-	PublicKeyEnvName   string
-	PrivateKeyEnvName  string
-	SymetricKeyEnvName string
-	// revive:disable:struct-tag
-	expiration Duration `validate:"min=1"`
-	subject    string   `validate:"required"`
-	token      string   `validate:"required"`
-	// revive:enable:struct-tag
+	Audience    string
+	Footer      *string
+	Issuer      string
+	Location    string
+	PublicKey   string
+	PrivateKey  string
+	SymetricKey string
+	expiration  Duration `validate:"min=1"`
+	subject     string   `validate:"required"`
+	token       string   `validate:"required"`
 }
 
 type Tokenizer struct {
@@ -93,30 +90,6 @@ func validation(record any) (err error) {
 	validate = validator.New()
 	err = validate.Struct(record)
 	return
-}
-
-func symetrickey(value string) string {
-	if value == emptyString {
-		return os.Getenv(defaultSymetricKeyEnvName)
-	}
-
-	return os.Getenv(value)
-}
-
-func privatekey(value string) string {
-	if value == emptyString {
-		return os.Getenv(defaultPrivateKeyEnvName)
-	}
-
-	return os.Getenv(value)
-}
-
-func publickey(value string) string {
-	if value == emptyString {
-		return os.Getenv(defaultPublicKeyEnvName)
-	}
-
-	return os.Getenv(value)
 }
 
 func now() time.Time {

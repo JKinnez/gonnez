@@ -3,6 +3,7 @@ package tokenizer
 import (
 	"crypto/ed25519"
 	"encoding/hex"
+	"errors"
 
 	"github.com/o1egl/paseto"
 )
@@ -28,6 +29,11 @@ func (t *Tokenizer) ReadSymetricBearerToken(token string) (jsonToken ReaderResul
 
 func (t *Tokenizer) ReadPrivateToken(token string) (jsonToken ReaderResult, err error) {
 	t.token = token
+	if t.PublicKey == emptyString {
+		err = errors.New(ErrNotPublicKey)
+		return
+	}
+
 	jsonToken, err = t.verify()
 	if err != nil {
 		return
@@ -39,6 +45,11 @@ func (t *Tokenizer) ReadPrivateToken(token string) (jsonToken ReaderResult, err 
 
 func (t *Tokenizer) ReadSymetricToken(token string) (jsonToken ReaderResult, err error) {
 	t.token = token
+	if t.SymetricKey == emptyString {
+		err = errors.New(ErrNotSymetricKey)
+		return
+	}
+
 	jsonToken, err = t.decrypt()
 	if err != nil {
 		return
@@ -49,7 +60,7 @@ func (t *Tokenizer) ReadSymetricToken(token string) (jsonToken ReaderResult, err
 }
 
 func (t *Tokenizer) verify() (jsonToken ReaderResult, err error) {
-	key, err := hex.DecodeString(publickey(t.PublicKeyEnvName))
+	key, err := hex.DecodeString(t.PublicKey)
 	if err != nil {
 		return
 	}
@@ -64,7 +75,7 @@ func (t *Tokenizer) verify() (jsonToken ReaderResult, err error) {
 }
 
 func (t *Tokenizer) decrypt() (jsonToken ReaderResult, err error) {
-	key, err := hex.DecodeString(symetrickey(t.SymetricKeyEnvName))
+	key, err := hex.DecodeString(t.SymetricKey)
 	if err != nil {
 		return
 	}
