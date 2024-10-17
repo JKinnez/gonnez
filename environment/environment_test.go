@@ -13,7 +13,7 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is production", func() {
 			It("should return true", func() {
 				_ = os.Setenv("ENV", "production")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsProduction()).To(BeTrue())
 			})
 		})
@@ -21,19 +21,19 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is not production", func() {
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "development")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsProduction()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "test")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsProduction()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "ci")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsProduction()).To(BeFalse())
 			})
 		})
@@ -43,7 +43,7 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is development", func() {
 			It("should return true", func() {
 				_ = os.Setenv("ENV", "development")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsDevelopment()).To(BeTrue())
 			})
 		})
@@ -51,19 +51,19 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is not development", func() {
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "production")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsDevelopment()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "test")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsDevelopment()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "ci")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsDevelopment()).To(BeFalse())
 			})
 		})
@@ -73,7 +73,7 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is test", func() {
 			It("should return true", func() {
 				_ = os.Setenv("ENV", "test")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsTest()).To(BeTrue())
 			})
 		})
@@ -81,19 +81,19 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is not test", func() {
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "production")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsTest()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "development")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsTest()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "ci")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsTest()).To(BeFalse())
 			})
 		})
@@ -103,7 +103,7 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is ci", func() {
 			It("should return true", func() {
 				_ = os.Setenv("ENV", "ci")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsCI()).To(BeTrue())
 			})
 		})
@@ -111,19 +111,19 @@ var _ = Describe("Environment", func() {
 		Context("when the environment is not ci", func() {
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "production")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsCI()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "development")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsCI()).To(BeFalse())
 			})
 
 			It("should return false", func() {
 				_ = os.Setenv("ENV", "test")
-				environment.Init("ENV")
+				environment.Init(os.Getenv("ENV"))
 				Expect(environment.IsCI()).To(BeFalse())
 			})
 		})

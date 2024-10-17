@@ -1,27 +1,23 @@
 package environment
 
-import (
-	"os"
-)
-
-var envKey string
+var env string
 
 func Init(key string) {
-	envKey = key
+	env = key
 }
 
 func IsProduction() bool {
-	return os.Getenv(envKey) == "production"
+	return env == "production"
 }
 
 func IsDevelopment() bool {
-	return os.Getenv(envKey) == "development"
+	return env == "development"
 }
 
 func IsTest() bool {
-	return os.Getenv(envKey) == "test"
+	return env == "test"
 }
 
 func IsCI() bool {
-	return os.Getenv(envKey) == "ci"
+	return env == "ci"
 }

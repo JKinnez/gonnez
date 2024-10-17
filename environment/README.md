@@ -10,7 +10,7 @@ package main
 import "github.com/gonnez/environment"
 
 func main() {
-  environment.Init("YOUR_ENV_NAME")
+  environment.Init("YOUR_VALUE")
 
   if environment.IsProduction() {
     // Do something
