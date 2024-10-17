@@ -14,16 +14,14 @@ import (
 )
 
 const (
-	errNoDB             = "no database connection"
-	errCanDelete        = "can't delete data in production you maniac"
-	errAlreadyConnected = "already connected to database"
-	defaultDBEnv        = "GONNEZ_DATABASE_URL"
-	emptyString         = ""
+	ErrNoDB      = "no database connection"
+	ErrCanDelete = "can't delete data in production you maniac"
+	emptyString  = ""
 )
 
 type DBOptions struct {
 	Config *gorm.Config
-	DBEnv  string
+	DSN    string
 	Models []any
 }
 
@@ -50,12 +48,12 @@ func CustomLogger() logger.Interface {
 
 func ClearData(orm *gorm.DB, models ...any) (err error) {
 	if orm == nil {
-		err = fmt.Errorf(errNoDB)
+		err = fmt.Errorf(ErrNoDB)
 		return
 	}
 
 	if environment.IsProduction() {
-		return fmt.Errorf(errCanDelete)
+		return fmt.Errorf(ErrCanDelete)
 	}
 
 	for _, m := range lo.Reverse(models) {
@@ -68,17 +66,9 @@ func ClearData(orm *gorm.DB, models ...any) (err error) {
 }
 
 func (dbo *DBOptions) open() (db *gorm.DB, err error) {
-	db, err = gorm.Open(postgres.Open(dbo.source()), dbo.Config)
+	db, err = gorm.Open(postgres.Open(dbo.DSN), dbo.Config)
 
 	return
-}
-
-func (dbo *DBOptions) source() string {
-	if dbo.DBEnv == emptyString {
-		return os.Getenv(defaultDBEnv)
-	}
-
-	return os.Getenv(dbo.DBEnv)
 }
 
 func (dbo *DBOptions) schema(orm *gorm.DB) (err error) {
