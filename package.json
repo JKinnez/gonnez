@@ -1,6 +1,6 @@
 {
   "name": "gonnez",
-  "version": "2.0.1",
+  "version": "1.4.0",
   "main": "main.go",
   "private": true,
   "scripts": {
